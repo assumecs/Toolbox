@@ -4,7 +4,7 @@
     <div class="tabs">
       <div class="tab" v-for="(item, index) in tabs" :key="index" :class="index==activeTab" @click="clickTab(index)">{{item}}</div>
     </div>
-    <div v-for="(item, index) in productList" :key="index">index</div>
+    <div v-for="(item, index) in productList" :key="index">{{item.name}}</div>
   </div>
 </template>
 
@@ -14,8 +14,25 @@ export default {
     return {
       activeTab: 0,
       tabs: ['产险', '个险', '车险'],
-      productList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+      productList: [{
+        name: '产品1',
+        code: 'product1',
+        image: 'http://192.168.0.104/mock/image/nice&veryNice.png'
+      }]
     }
+  },
+  mounted () {
+    let that = this
+    wx.request({
+      url: 'http://192.168.0.104/mock/json/product_list.json',
+      header: {
+        'content-type': 'application/json'
+      },
+      success (resp) {
+        console.log('product_list', resp.data)
+        that.productList = resp.data
+      }
+    })
   },
   methods: {
     search () {
