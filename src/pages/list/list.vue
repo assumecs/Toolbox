@@ -1,15 +1,19 @@
 <template>
   <div>
-    <div @click="search">点我搜索</div>
+    <a href="/pages/search/main" class="search-entry">点我搜索</a>
     <div class="tabs">
       <div class="tab" v-for="(item, index) in tabs" :key="index" :class="index==activeTab" @click="clickTab(index)">{{item}}</div>
     </div>
-    <div v-for="(item, index) in productList" :key="index">{{item.name}}</div>
+    <product-list :productList="productList"></product-list>
   </div>
 </template>
 
 <script>
+import ProductList from '@/components/productList'
 export default {
+  components: {
+    ProductList
+  },
   data () {
     return {
       activeTab: 0,
@@ -54,5 +58,8 @@ export default {
     text-align: center;
     align-items: center;
     justify-content: center;
+  }
+  .search-entry {
+    text-align: center;
   }
 </style>
