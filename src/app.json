@@ -1,10 +1,11 @@
 {
   "pages": [
-    "pages/list/main",
-    "pages/search/main",
+    "pages/home/main",
+    "pages/generate/main",
     "pages/index/main",
     "pages/logs/main",
-    "pages/counter/main"
+    "pages/counter/main",
+    "pages/search/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
