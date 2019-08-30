@@ -15,7 +15,13 @@
       </label>
     </radio-group>
     <button class="gen" @click="gen">获取可用的身份证号码</button>
-    <div class="item">{{result}}</div>
+    <!-- <div class="item">{{result}}</div> -->
+    <div class="list">
+      <div class="item item-idno" v-for="(item, index) in list" :key="index">
+        <span>{{item}}</span>
+        <button @click="copy(item)" class="copy-btn">复制</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -25,6 +31,9 @@ import region from '@/components/region'
 import { formatDate } from '@/utils/index'
 let date = new Date()
 date.setFullYear(date.getFullYear() - 20)
+
+let weight = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
+let tail = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
 
 export default {
   components: {
@@ -46,6 +55,7 @@ export default {
       endDate: '2100-12-12',
       gender: '1',
       result: '',
+      list: [],
       extra: ''
     }
   },
@@ -67,13 +77,58 @@ export default {
       console.log('gender e.mp.detail.value: ', e.mp.detail.value)
       this.gender = e.mp.detail.value
     },
+    /**
+     * 17 位 加权因子
+     * 1 2  3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
+     * 7 9 10 5 8 4 2 1 6  3  7  9 10  5  8  4  2
+     * 余数 校验码 /11
+     * 0 1 2 3 4 5 6 7 8 9 10
+     * 1 0 X 9 8 7 6 5 4 3  2
+     */
     gen () {
       var ex = this.areaCode + this.birthday.replace(/-/g, '')
       this.result = ex
       console.log(ex)
-      // for( let i = 0; i < 500; i++) {
-      //   // TODO
-      // }
+      let list = []
+      let temp = ''
+      for (let i = 0; i < 500; i++) {
+        // TODO
+        temp = this.padding(i * 2 + Number(this.gender), 3)
+        temp = ex + temp
+        // console.log(temp)
+        let sum = 0
+        weight.forEach((item, index) => {
+          sum += item * temp[index]
+        })
+        let remainder = sum % 11
+        temp = temp + tail[remainder]
+        list.push(temp)
+      }
+      if (this.gender === '2') {
+        list.pop()
+      }
+      this.list = list
+    },
+    padding (num, len) {
+      num = '' + num
+      var lenth = num.length
+      while (lenth < len) {
+        num = '0' + num
+        lenth++
+      }
+      return num
+    },
+    copy (item) {
+      wx.setClipboardData({
+        data: item,
+        success (res) {
+          wx.getClipboardData({
+            success (res) {
+              console.log(res.data) // data
+            }
+          })
+        }
+      })
     }
   }
 }
@@ -91,6 +146,18 @@ export default {
   text-align: right;
 }
 .gen {
-  margin-top: 20px;
+  margin: 20px 5px;
+}
+.item-idno {
+  display: flex;
+  justify-content: space-between;
+}
+.copy-btn {
+  border: 2rpx #ccc solid;
+  border-radius: 10rpx;
+  padding: 0 10rpx;
+  line-height: 1.2em;
+  margin: 0;
+  font-size: 1em;
 }
 </style>

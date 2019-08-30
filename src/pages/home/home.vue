@@ -17,7 +17,7 @@ export default {
   data () {
     return {
       menu: [{
-        name: '编码证件号',
+        name: '生成证件号',
         icon: '/static/images/user.png',
         url: '/pages/generate/main'
       }, {
