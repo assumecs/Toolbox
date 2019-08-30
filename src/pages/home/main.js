@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import App from './home'
+import Tips from '@/utils/tip'
+Vue.prototype.$tips = Tips
 
 // add this to handle exception
 Vue.config.errorHandler = function (err) {

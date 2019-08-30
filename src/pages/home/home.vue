@@ -1,6 +1,6 @@
 <template>
   <div class="menu-list">
-    <a class="menu-item" v-for="(item, index) in menu" :key="index" :href="item.url">
+    <a class="menu-item" v-for="(item, index) in menu" :key="index" @click="clickItem(item)">
       <img class="menu-icon" :src="item.icon" background-size="cover" />
       <card :text="item.name"></card>
     </a>
@@ -17,22 +17,33 @@ export default {
   data () {
     return {
       menu: [{
-        name: '生成证件号',
+        name: '编码证件号',
         icon: '/static/images/user.png',
         url: '/pages/generate/main'
       }, {
         name: '解析证件号',
         icon: '/static/images/user.png',
-        url: '/pages/logs/main'
+        url: ''
       }, {
-        name: 'logs',
+        name: '颜色选择器',
         icon: '/static/images/user.png',
-        url: '/pages/logs/main'
+        url: ''
       }, {
         name: 'counter',
         icon: '/static/images/user.png',
-        url: '/pages/counter/main'
+        url: ''
       }]
+    }
+  },
+  methods: {
+    clickItem (item) {
+      if (item.url) {
+        wx.navigateTo({
+          url: item.url
+        })
+      } else {
+        this.$tips.alert('coming soon...')
+      }
     }
   }
 }
